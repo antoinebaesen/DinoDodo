@@ -190,6 +190,14 @@ La mise à jour a passé la compilation Angular et la compilation Android debug.
 
 La lecture réelle des fichiers, la reprise après redémarrage et les échanges avec Horloge doivent encore être vérifiés sur l’appareil cible.
 
+## Licence
+
+Copyright © 2026 Antoine Baesen.
+
+Ce projet est un logiciel libre et open source sous licence **GNU General Public License, version 3 ou ultérieure (GPL-3.0-or-later)**. Le texte intégral est disponible dans [LICENSE](LICENSE).
+
+Les dépendances et composants tiers conservent leurs licences respectives. Cette licence ne réattribue pas les droits sur les musiques, images ou autres contenus tiers utilisés avec l’application.
+
 ## Transparence sur la réalisation
 
 Ce projet a été réalisé avec l’aide de **Codex, l’assistant de développement d’OpenAI**, pour la rédaction et la modification du code, la documentation et certaines vérifications. Les fonctionnalités ont été définies et orientées par le porteur du projet. L’assistance de Codex ne remplace pas les essais sur les appareils Android utilisés.
