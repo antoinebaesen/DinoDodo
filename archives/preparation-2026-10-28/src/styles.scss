@@ -1,0 +1,35 @@
+@import '@ionic/angular/css/core.css';
+@import '@ionic/angular/css/normalize.css';
+@import '@ionic/angular/css/structure.css';
+@import '@ionic/angular/css/typography.css';
+
+:root {
+  color-scheme: light;
+  --ion-font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --ion-background-color: #f8f7fb;
+  --ion-text-color: #282632;
+  --ion-color-primary: #8e82c9;
+  --ion-color-primary-rgb: 142, 130, 201;
+  --ion-color-primary-contrast: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: #f8f7fb;
+}
+
+body {
+  overscroll-behavior-y: none;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}

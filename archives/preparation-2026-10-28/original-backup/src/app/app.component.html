@@ -1,0 +1,167 @@
+<ion-app>
+  <ion-content [fullscreen]="true" class="page-content">
+    <main class="shell">
+      <header class="hero">
+        <div class="eyebrow">
+          <span class="eyebrow-dot"></span>
+          A grougrou 🦖
+        </div>
+        <h1>🦕 Réveillosaure.</h1>
+      </header>
+
+      @if (loading) {
+        <section class="glass-card loading-card">
+          <ion-spinner name="crescent"></ion-spinner>
+          <span>Chargement…</span>
+        </section>
+      } @else {
+        <section class="glass-card alarm-card">
+          <div class="section-title-row">
+            <div class="section-icon lavender">
+              <ion-icon name="alarm-outline"></ion-icon>
+            </div>
+            <div>
+              <span class="section-kicker">RÉVEIL</span>
+              <h2>{{ nextTriggerLabel }}</h2>
+            </div>
+            <ion-toggle [(ngModel)]="enabled" aria-label="Activer le réveil"></ion-toggle>
+          </div>
+
+          <label class="time-field" [class.disabled]="!enabled">
+            <span>Heure</span>
+            <input type="time" [(ngModel)]="time" [disabled]="!enabled" />
+          </label>
+        </section>
+
+        <section class="glass-card">
+          <div class="section-title-row compact">
+            <div class="section-icon blue">
+              <ion-icon name="folder-open-outline"></ion-icon>
+            </div>
+            <div class="grow">
+              <span class="section-kicker">DOSSIER AUDIO</span>
+              <h2>{{ rootName || 'Aucun dossier choisi' }}</h2>
+            </div>
+          </div>
+
+          <p class="muted">
+            Chaque sous-dossier devient automatiquement une bibliothèque.
+          </p>
+
+          <div class="button-row">
+            <ion-button fill="solid" class="soft-button" (click)="chooseFolder()">
+              <ion-icon slot="start" name="folder-open-outline"></ion-icon>
+              {{ rootName ? 'Changer' : 'Choisir un dossier' }}
+            </ion-button>
+
+            @if (rootName) {
+              <ion-button fill="clear" class="icon-button" (click)="refreshLibraries()" aria-label="Actualiser">
+                <ion-icon name="refresh-outline"></ion-icon>
+              </ion-button>
+            }
+          </div>
+        </section>
+
+        <section class="glass-card" [class.card-disabled]="!rootName">
+          <div class="section-title-row compact">
+            <div class="section-icon pink">
+              <ion-icon name="musical-notes-outline"></ion-icon>
+            </div>
+            <div>
+              <span class="section-kicker">BIBLIOTHÈQUE DU JOUR</span>
+              <h2>Que veux-tu entendre demain ?</h2>
+            </div>
+          </div>
+
+          <div class="select-shell">
+            <ion-select
+              [(ngModel)]="selectedLibraryUri"
+              [disabled]="!rootName || libraries.length === 0"
+              interface="popover"
+              placeholder="Choisir une bibliothèque"
+              aria-label="Bibliothèque du jour"
+            >
+              @for (library of libraries; track library.uri) {
+                <ion-select-option [value]="library.uri">
+                  {{ library.name }} · {{ library.audioCount }} audio{{ library.audioCount > 1 ? 's' : '' }}
+                </ion-select-option>
+              }
+            </ion-select>
+          </div>
+
+          @if (rootName && libraries.length === 0) {
+            <p class="empty-hint">Crée au moins un sous-dossier contenant des fichiers audio.</p>
+          }
+        </section>
+
+        <section class="glass-card option-card">
+          <div class="option-copy">
+            <div class="section-icon mint">
+              <ion-icon name="shuffle-outline"></ion-icon>
+            </div>
+            <div>
+              <h2>Départ aléatoire</h2>
+              <p>Commence à un endroit différent du morceau, en évitant les 30 dernières secondes.</p>
+            </div>
+          </div>
+          <ion-toggle [(ngModel)]="randomStart" aria-label="Départ aléatoire dans le morceau"></ion-toggle>
+        </section>
+
+        @if (!exactAlarmAllowed) {
+          <section class="permission-card">
+            <ion-icon name="warning-outline"></ion-icon>
+            <div>
+              <strong>Autorisation d’alarme précise requise</strong>
+              <span>Android doit autoriser l’application à déclencher le réveil exactement à l’heure choisie.</span>
+            </div>
+            <ion-button fill="clear" (click)="openExactAlarmSettings()">Autoriser</ion-button>
+          </section>
+        }
+
+        @if (message) {
+          <div class="feedback success">
+            <ion-icon name="checkmark-circle-outline"></ion-icon>
+            <span>{{ message }}</span>
+          </div>
+        }
+
+        @if (error) {
+          <div class="feedback error">
+            <ion-icon name="warning-outline"></ion-icon>
+            <span>{{ error }}</span>
+          </div>
+        }
+
+        <div class="primary-actions">
+          <ion-button
+            expand="block"
+            class="save-button"
+            [disabled]="saving || !canSave"
+            (click)="save()"
+          >
+            @if (saving) {
+              <ion-spinner name="crescent"></ion-spinner>
+            } @else {
+              Enregistrer le réveil
+            }
+          </ion-button>
+
+          <div class="test-actions">
+            <ion-button fill="clear" [disabled]="testing || !selectedLibrary" (click)="test()">
+              <ion-icon slot="start" name="play-outline"></ion-icon>
+              Tester
+            </ion-button>
+            <ion-button fill="clear" (click)="stop()">
+              <ion-icon slot="start" name="stop-outline"></ion-icon>
+              Arrêter
+            </ion-button>
+          </div>
+        </div>
+
+        @if (!alarmService.isNative) {
+          <p class="web-note">Mode aperçu navigateur : le sélecteur de dossier et la lecture audio sont simulés.</p>
+        }
+      }
+    </main>
+  </ion-content>
+</ion-app>
